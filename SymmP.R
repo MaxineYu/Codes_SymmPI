@@ -5,6 +5,7 @@ l31<-c()
 in11<-c()
 in21<-c()
 in31<-c()
+alpha=0.10 #can be changed to 0.20.
 #--------------Compute prediction coverage probability and length of prediction set-----------
 
 for (rep2 in c(1:100)){ #100 independent trials
@@ -91,7 +92,7 @@ for (rep in c(1:500)){ #500 test samples
   }
   
   
-  #--------Predict---------
+  #--------Predict----------------
   Y_pred<-matrix(nrow=3,ncol=18)
   
   for (i in c(1:18)){
@@ -139,6 +140,7 @@ for (rep in c(1:500)){ #500 test samples
         }
         Mat3<-Mat0[1,setdiff(c(1:18),j)]
         Mat3<-c(Mat3,Mat0[i,j])
+        if (alpha=0.10){
         if (sum(Mat1[i,j]<Mat1)<5){
           ind1<-c(ind1,1)
         }else{ind1<-c(ind1,0)}
@@ -149,6 +151,19 @@ for (rep in c(1:500)){ #500 test samples
           ind3<-c(ind3,1)
         }else{ind3<-c(ind3,0)}
       }
+        else{
+        if (sum(Mat1[i,j]<Mat1)<10){
+          ind1<-c(ind1,1)
+        }else{ind1<-c(ind1,0)}
+        if (sum(Mat0[i,j]<Mat0)<10){
+          ind2<-c(ind2,1)
+        }else{ind2<-c(ind2,0)}
+        if (sum(Mat3[length(Mat3)]<Mat3)<2){
+          ind3<-c(ind3,1)
+        }else{ind3<-c(ind3,0)}
+      }
+      }
+  
       #--------------------Record the length of the prediction set and the indicator of coverage------------
       len1<-c(len1,seq0[which(ind1==0)[length(which(ind1==0))]]-seq0[which(ind1==0)[1]]) #our length
       len2<-c(len2,seq0[which(ind2==0)[length(which(ind2==0))]]-seq0[which(ind2==0)[1]]) #conformal prediction
